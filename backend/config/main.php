@@ -10,6 +10,14 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    //设置语言
+    'language'=>'zh-CN',
+    //设置布局文件
+    //'layout'=>false,
+    //设置默认路由
+    //'defaultRoute'=>'admin/login',
+    //修改时区
+    'timeZone'=>'PRC',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
@@ -17,7 +25,9 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            //指定实现认证接口的类
+            'identityClass' => 'backend\models\admin',
+            //'loginUrl'=>'login.html',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
@@ -37,14 +47,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
