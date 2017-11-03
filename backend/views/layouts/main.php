@@ -36,7 +36,26 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => '文章', 'url' => ['/article/index']],
+        ['label' => '文章管理',
+         'items' =>[
+             [
+              'label'=>'文章列表',
+              'url' => ['/article/index'],
+             ],
+             [
+                 'label'=>'文章分类列表',
+                 'url' => ['/article-category/index'],
+             ],
+             [
+                 'label'=>'添加文章',
+                 'url' => ['/article/add'],
+             ],
+             [
+                 'label'=>'添加文章分类',
+                 'url' => ['/article-category/add'],
+             ],
+         ]
+        ],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];

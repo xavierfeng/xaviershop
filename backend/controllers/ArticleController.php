@@ -96,6 +96,14 @@ class ArticleController extends Controller
         }
     }
 
+    //文章查看
+    public function actionView($id)
+    {
+        $article = Article::findOne(['id'=>$id]);
+        $articleDetail = ArticleDetail::findOne(['article_id'=>$id]);
+        return $this->render('view',['article'=>$article,'articleDetail'=>$articleDetail]);
+    }
+
     //删除文章分类
     public function actionDelete()
     {

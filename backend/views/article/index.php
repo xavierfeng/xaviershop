@@ -26,12 +26,13 @@
             </td>
             <td><?=date('Y-m-d H:i:s',$article->create_time)?></td>
             <td>
-                <a href="<?=\yii\helpers\Url::to(['article/update','id'=>$article->id])?>" class="btn btn-info">编辑</a>
-                <a href="javascript:;" class="btn btn-warning" id="<?=$article->id?>">删除</a>
+                <a href="<?=\yii\helpers\Url::to(['article/view','id'=>$article->id])?>" class="btn btn-info">查看</a>
+                <a href="<?=\yii\helpers\Url::to(['article/update','id'=>$article->id])?>" class="btn btn-warning">编辑</a>
+                <a href="javascript:;" class="btn btn-danger" id="<?=$article->id?>">删除</a>
             </td>
         </tr>
     <?php endforeach; ?>
-    <a href="<?=\yii\helpers\Url::to(['article/add'])?>"  class="btn btn-info">添加文章分类</a>
+    <a href="<?=\yii\helpers\Url::to(['article/add'])?>"  class="btn btn-info">添加文章</a>
 </table>
 
 <?php //分页工具条`
