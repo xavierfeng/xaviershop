@@ -35,14 +35,13 @@ class ArticleController extends Controller
             $article->load($request->post());
             $articleDetail->load($request->post());
             //验证表单数据
-            if($article->validate()){
+            if($article->validate()&&$articleDetail->validate()){
                 //验证通过
                 //保存文章表信息
                 $article->create_time=time();
                 $article->save(false);
                 //获取新增文章id
-                $article_id=\Yii::$app->db->getLastInsertID();
-                $articleDetail->article_id=$article_id;
+                $articleDetail->article_id=$article->id;
                 $articleDetail->save();
                 //跳转
                 \Yii::$app->session->setFlash('success','添加成功');
@@ -74,7 +73,8 @@ class ArticleController extends Controller
             $article->load($request->post());
             $articleDetail->load($request->post());
             //验证表单数据
-            if($article->validate()){
+            //文章和文章详情都需要验证通过
+            if($article->validate()&&$articleDetail->validate()){
                 //验证通过
                 $article->save(false);
                 $articleDetail->save();

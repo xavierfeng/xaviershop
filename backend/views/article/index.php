@@ -43,7 +43,7 @@ echo \yii\widgets\LinkPager::widget([
 $url=\yii\helpers\Url::to(['article/delete']);
 $this->registerJs(<<<JS
 
-        $("table").on("click",".btn-warning",function(){
+        $("table").on("click",".btn-danger",function(){
             if(confirm('是否确认删除')){
                  var that =this ;
                  var url = "{$url}";
