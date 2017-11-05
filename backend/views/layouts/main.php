@@ -36,6 +36,18 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
+        ['label' => '品牌管理',
+            'items' =>[
+                [
+                    'label'=>'品牌列表',
+                    'url' => ['/brand/index'],
+                ],
+                [
+                    'label'=>'品牌添加',
+                    'url' => ['/brand/add'],
+                ],
+            ]
+        ],
         ['label' => '文章管理',
          'items' =>[
              [
@@ -47,11 +59,11 @@ AppAsset::register($this);
                  'url' => ['/article-category/index'],
              ],
              [
-                 'label'=>'添加文章',
+                 'label'=>'文章添加',
                  'url' => ['/article/add'],
              ],
              [
-                 'label'=>'添加文章分类',
+                 'label'=>'文章分类添加',
                  'url' => ['/article-category/add'],
              ],
          ]
