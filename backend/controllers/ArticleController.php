@@ -8,7 +8,6 @@ use backend\models\ArticleDetail;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\Request;
-
 class ArticleController extends Controller
 {
     //列表功能

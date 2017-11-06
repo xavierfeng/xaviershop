@@ -56,6 +56,24 @@ class SiteController extends Controller
                 'minLength'=>4,
                 'maxLength'=>4,
             ],
+            'upload' => [
+                'class' => 'kucha\ueditor\UEditorAction',
+                'config' => [
+                    //图片访问路径前缀
+                    "imageUrlPrefix"  => "http://www.baidu.com",
+                    //上传保存路径
+                    "imagePathFormat" => "/upload/article/",
+                    "imageRoot" => Yii::getAlias("@webroot"),
+                    // 上传图片格式显示
+                    "imageAllowFiles"         => [
+                        ".png",
+                        ".jpg",
+                        ".jpeg",
+                        ".gif",
+                        ".bmp"
+                    ],
+            ],
+            ]
         ];
     }
 
