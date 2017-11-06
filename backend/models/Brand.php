@@ -2,11 +2,17 @@
 namespace backend\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 class Brand extends ActiveRecord
 {
     public $code;
 
+    //获取所有品牌
+    public function getBrands()
+    {
+        return ArrayHelper::map(self::find()->asArray()->all(), 'id', 'name');
+    }
     //设置属性标签名称
     public function attributeLabels()
     {

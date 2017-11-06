@@ -60,10 +60,10 @@ class SiteController extends Controller
                 'class' => 'kucha\ueditor\UEditorAction',
                 'config' => [
                     //图片访问路径前缀
-                    "imageUrlPrefix"  => "http://www.baidu.com",
+                    "imageUrlPrefix"  => "http://admin.yii2.com",
                     //上传保存路径
-                    "imagePathFormat" => "/upload/article/",
-                    "imageRoot" => Yii::getAlias("@webroot"),
+                    "imagePathFormat" => "/image/{yyyy}{mm}{dd}/{time}{rand:6}",
+                    "imageRoot" => Yii::getAlias("@webroot").'/upload',
                     // 上传图片格式显示
                     "imageAllowFiles"         => [
                         ".png",

@@ -39,6 +39,14 @@ AppAsset::register($this);
         ['label' => '商品管理',
             'items' =>[
                 [
+                    'label'=>'商品列表',
+                    'url' => ['/goods/index'],
+                ],
+                [
+                    'label'=>'商品添加',
+                    'url' => ['/goods/add'],
+                ],
+                [
                     'label'=>'商品分类列表',
                     'url' => ['/goods-category/index'],
                 ],
@@ -80,12 +88,44 @@ AppAsset::register($this);
              ],
          ]
         ],
+        ['label' => '用户管理',
+            'items' =>[
+                [
+                    'label'=>'用户列表',
+                    'url' => ['/user/index'],
+                ],
+                [
+                    'label'=>'用户添加',
+                    'url' => ['/user/add'],
+                ],
+            ]
+        ],
+        ['label' => 'Rbac管理',
+            'items' =>[
+                [
+                    'label'=>'权限列表',
+                    'url' => ['/auth/view-pms'],
+                ],
+                [
+                    'label'=>'添加权限',
+                    'url' => ['/auth/add-pms'],
+                ],
+                [
+                    'label'=>'角色列表',
+                    'url' => ['/auth/view-role'],
+                ],
+                [
+                    'label'=>'添加权限',
+                    'url' => ['/auth/add-role'],
+                ],
+            ]
+        ],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => '登录', 'url' => ['/user/login']];
     } else {
         $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+            . Html::beginForm(['/user/logout'], 'post')
             . Html::submitButton(
                 '注销 (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']

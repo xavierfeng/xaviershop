@@ -80,9 +80,13 @@ class GoodsCategoryController extends Controller
                 //验证通过
                 //保存数据
                 if($goodsCategory->parent_id == 0){
-                    //创建根节点
-                    $goodsCategory->makeRoot(false);
-                    //$goodsCategory->save(false); 不能使用save
+                    //修改根节点
+                    //根节点修改为根节点报错--单独处理 旧parent_id=0
+                    if($goodsCategory->getOldAttribute('parent_id')==0){
+                        $goodsCategory->save(false);
+                    }else{
+                        $goodsCategory->makeRoot(false);
+                    }
                     //跳转
                     \Yii::$app->session->setFlash('success','编辑根节点成功');
                     $this->redirect(['goods-category/index']);
@@ -112,15 +116,20 @@ class GoodsCategoryController extends Controller
         //判断该分类是否有子节点
         $request = new Request();
         $id=$request->post();
-        $child = GoodsCategory::find()->where(['parent_id'=>$id])->all();
-            if($child){
-            return "false";
-        }else{
-            $goodsCategory = GoodsCategory::findOne(['id'=>$id]);
-            $goodsCategory->delete();
-            return 'success';
-
-        }
+        $goodsCategory = GoodsCategory::findOne(['id'=>$id]);
+            //判断该节点是否是叶子节点(没有儿子)
+            if($goodsCategory->isLeaf()){
+                //判断该节点是否是根节点
+                if($goodsCategory->parent_id != 0){
+                    $goodsCategory->delete();
+                    return 'success';
+                }else{
+                    $goodsCategory->deleteWithChildren();
+                    return 'success';
+                }
+            }else{
+                return "false";
+            }
 
     }
 }

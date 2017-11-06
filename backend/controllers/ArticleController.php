@@ -111,7 +111,6 @@ class ArticleController extends Controller
         if($article){
             $article->status = -1;
             $article->save(false);
-            //跳转
             echo 'success';
         }
     }
