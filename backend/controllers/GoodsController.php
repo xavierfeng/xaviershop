@@ -22,21 +22,25 @@ class GoodsController extends  Controller
     public function actionIndex()
     {
         //分页工具类
-        $keywords = \Yii::$app->request->get();
-        if($keywords['searchName']){
-            $name=$keywords['searchName']?$keywords['searchName']:"";
-            $sn=$keywords['searchSn']?$keywords['searchSn']:"";
-            $lft=$keywords['searchLft']?$keywords['searchLft']:0;
-            $rgt=$keywords['searchRgt']?$keywords['searchRgt']:PHP_INT_MAX;
-            $query= Goods::find()->where('status=1')->andWhere(['like','sn',"{$sn}"])->andWhere(['like','name',"{$name}"])->andWhere(['between','shop_price',$lft,$rgt]);
-        }else{
-            $query= Goods::find()->where('status=1');
-        }
-        $pager = new Pagination();
-        $pager->pageSize = 3;
-        $pager->totalCount=$query->count();
-        $goodsList=$query->limit($pager->limit)->offset($pager->offset)->all();
-        return $this->render('index',['goodsList'=>$goodsList,'pager'=>$pager]);
+            $name=\Yii::$app->request->get('searchName');
+            $sn=\Yii::$app->request->get('searchSn');
+            $lft=\Yii::$app->request->get('searchLft');
+            $rgt=\Yii::$app->request->get('searchRgt');
+            $query= Goods::find();
+            if($name){
+                $query->andWhere(['like','name',$name]);
+            }if($sn){
+                $query->andWhere(['sn'=>$sn]);
+            }if($lft){
+                $query->andWhere(['>=','shop_price',$lft]);
+            }if($rgt){
+                $query->andWhere(['<=','shop_price',$rgt]);
+            }
+            $pager = new Pagination();
+            $pager->pageSize = 3;
+            $pager->totalCount=$query->count();
+            $goodsList=$query->andwhere('status=1')->limit($pager->limit)->offset($pager->offset)->all();
+            return $this->render('index',['goodsList'=>$goodsList,'pager'=>$pager]);
     }
 
     //商品添加功能
@@ -240,7 +244,7 @@ class GoodsController extends  Controller
                     $goodsGallery->save();
                     $id=$goodsGallery->id;
                     //返回图片地址
-                    return Json::encode(['url'=>$path,'id'=>$id,'goodsId'=>$goodsId]);
+                    return Json::encode(['url'=>$path,'id'=>$id]);
                 }
                 //////////上传到七牛云/////////////////
             }

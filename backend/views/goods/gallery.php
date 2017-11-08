@@ -6,14 +6,12 @@
 <body>
 <table class="table table-bordered">
     <tr class="th">
-        <td>图片ID</td>
         <td>内容</td>
         <td>操作</td>
     </tr>
     <tbody id="tbody">
     <?php foreach ($goodsGallerys as $goodsGallery):?>
         <tr>
-            <td><?=$goodsGallery->goods_id?></td>
             <td><?=\yii\bootstrap\Html::img($goodsGallery->path)?></td>
             <td>
                 <a href="javascript:;" class="btn btn-danger" id="<?=$goodsGallery->id?>">删除</a>
@@ -60,7 +58,7 @@ $this->registerJs(
 });
 // 文件上传成功，回显图片
 uploader.on( 'uploadSuccess', function( file,response) {
-       $("<tr><td>"+response.goodsId+"</td><td><img src="+response.url+"></td><td> <a href='javascript:;' class='btn btn-danger' id="+response.id+">删除</a></td></tr>").appendTo("#tbody")
+       $("<tr><td><img src="+response.url+"></td><td> <a href='javascript:;' class='btn btn-danger' id="+response.id+">删除</a></td></tr>").appendTo("#tbody")
 });
 
 //删除图片
