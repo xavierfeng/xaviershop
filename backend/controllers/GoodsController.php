@@ -22,8 +22,8 @@ class GoodsController extends  Controller
     public function actionIndex()
     {
         //分页工具类
-        if(\Yii::$app->request->get()){
-            $keywords = \Yii::$app->request->get();
+        $keywords = \Yii::$app->request->get();
+        if($keywords['searchName']){
             $name=$keywords['searchName']?$keywords['searchName']:"";
             $sn=$keywords['searchSn']?$keywords['searchSn']:"";
             $lft=$keywords['searchLft']?$keywords['searchLft']:0;
@@ -69,7 +69,7 @@ class GoodsController extends  Controller
                     $newGoodsDayCount->day = date("Y-m-d",time());
                     $newGoodsDayCount->count=1;
                     $newGoodsDayCount->save();
-                    $goods->sn =$day.str_pad($day,5,"0",STR_PAD_RIGHT)."1";
+                    $goods->sn =str_pad($day,12,0,STR_PAD_RIGHT)."1";
                 }
                 //设置取消save的验证
                 $goods->save(false);
@@ -193,38 +193,7 @@ class GoodsController extends  Controller
     public function actionGallery($id)
     {
         $goodsGallerys = GoodsGallery::find()->where(['goods_id'=>$id])->all();
-        return $this->render('gallery',['goodsGallerys'=>$goodsGallerys]);
-    }
-
-    //商品相册添加
-    public function actionGalleryAdd($id)
-    {
-        $goodsGallery = new GoodsGallery();
-        $request = new Request();
-        if($request->getIsPost()){
-            //接受表单数据
-            $goodsGallery->load($request->post());
-            //验证表单数据
-            if($goodsGallery->validate()){
-                //验证通过
-                //保存数据
-                //设置取消save的验证
-                $goodsGallery->save();
-                //跳转
-                \Yii::$app->session->setFlash('success','添加成功');
-                $this->redirect(['goods/gallery','id'=>$id]);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$goodsGallery->getErrors();
-                //显示错误信息
-                var_dump($error);
-            }
-        }else{
-            //显示添加页面
-            return $this->render('gallery-add',['goodsGallery'=>$goodsGallery]);
-        }
-
+        return $this->render('gallery',['goodsGallerys'=>$goodsGallerys,'goods_id'=>$id]);
     }
 
     //处理ajax图片上传
@@ -262,8 +231,16 @@ class GoodsController extends  Controller
                 if ($err !== null) {
                     return Json::encode(['error'=>$err]);
                 } else {
+                    //保存数据到gallery表
+                    $goodsGallery = new GoodsGallery();
+                    $path='http://'.$qiniu."/".$fileName;
+                    $goodsId=\Yii::$app->request->get('id');
+                    $goodsGallery->path=$path;
+                    $goodsGallery->goods_id=$goodsId;
+                    $goodsGallery->save();
+                    $id=$goodsGallery->id;
                     //返回图片地址
-                    return Json::encode(['url'=>'http://'.$qiniu."/".$fileName]);
+                    return Json::encode(['url'=>$path,'id'=>$id,'goodsId'=>$goodsId]);
                 }
                 //////////上传到七牛云/////////////////
             }
@@ -279,6 +256,5 @@ class GoodsController extends  Controller
             $gallery->delete();
             return 'success';
         }
-
     }
 }
