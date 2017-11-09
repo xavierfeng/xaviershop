@@ -15,7 +15,7 @@ return [
     //设置布局文件
     //'layout'=>false,
     //设置默认路由
-    //'defaultRoute'=>'admin/login',
+    'defaultRoute'=>'user/login',
     //修改时区
     'timeZone'=>'PRC',
     'bootstrap' => ['log'],
@@ -31,6 +31,12 @@ return [
             //'loginUrl'=>'login.html',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'on beforeLogin'=>function($event){
+                $user= $event->identity;
+                $user->last_login_time=time();
+                $user->last_login_ip=Yii::$app->request->getUserIP();
+                $user->save(false);
+            }
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend

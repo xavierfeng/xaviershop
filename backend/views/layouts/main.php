@@ -35,7 +35,8 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
+    $menuItems =[];
+    $menuItems1 = [
         ['label' => '商品管理',
             'items' =>[
                 [
@@ -115,7 +116,7 @@ AppAsset::register($this);
                     'url' => ['/auth/view-role'],
                 ],
                 [
-                    'label'=>'添加权限',
+                    'label'=>'添加角色',
                     'url' => ['/auth/add-role'],
                 ],
             ]
@@ -124,18 +125,28 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => '登录', 'url' => ['/user/login']];
     } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/user/logout'], 'post')
-            . Html::submitButton(
-                '注销 (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
+        $menuItems[] = [
+            'label' => '欢迎! (' . Yii::$app->user->identity->username . ')',
+            'items'=>[
+                [
+                    'label'=>'修改密码',
+                    'url' => ['/user/password'],
+                ],
+                    [
+                        'label'=>'注销',
+                        'url' => ['/user/logout'],
+                    ]
+            ]
+
+        ];
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav'],
+            'items' =>$menuItems1
+        ]);
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
+        'items' =>$menuItems,
     ]);
     NavBar::end();
     ?>
