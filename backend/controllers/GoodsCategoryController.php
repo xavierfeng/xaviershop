@@ -2,6 +2,7 @@
 //////////////商品分类/////////////////
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\GoodsCategory;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -131,5 +132,14 @@ class GoodsCategoryController extends Controller
                 return "false";
             }
 
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ]
+        ];
     }
 }

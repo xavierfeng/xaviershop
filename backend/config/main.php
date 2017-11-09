@@ -28,7 +28,7 @@ return [
         'user' => [
             //指定实现认证接口的类
             'identityClass' => 'backend\models\User',
-            //'loginUrl'=>'login.html',
+            //'loginUrl'=>'login',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
             'on beforeLogin'=>function($event){

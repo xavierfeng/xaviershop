@@ -9,7 +9,7 @@ if($user->isNewRecord){
 //邮箱
 echo $form->field($user,'email')->textInput();
 //角色
-echo $form->field($user,'roles')->inline()->checkboxList($array);
+echo $form->field($user,'roles')->inline()->checkboxList($roles);
 //提交按钮
 echo \yii\bootstrap\Html::submitButton($user->isNewRecord?"添加":"修改",['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();

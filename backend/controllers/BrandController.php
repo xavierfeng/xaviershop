@@ -2,6 +2,7 @@
 /////////////brand品牌////////////////
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\Brand;
 use yii\data\Pagination;
 use yii\helpers\Json;
@@ -142,5 +143,14 @@ class BrandController extends Controller
             $brand->save(false);
             echo 'success';
         }
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ]
+        ];
     }
 }

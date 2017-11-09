@@ -2,6 +2,7 @@
 /////////////articlecategory文章分类////////////////
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\ArticleCategory;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -89,5 +90,14 @@ class ArticleCategoryController extends Controller
             $articleCate->save(false);
             echo 'success';
         }
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ]
+        ];
     }
 }

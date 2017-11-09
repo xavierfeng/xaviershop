@@ -36,96 +36,110 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems =[];
-    $menuItems1 = [
-        ['label' => '商品管理',
-            'items' =>[
-                [
-                    'label'=>'商品列表',
-                    'url' => ['/goods/index'],
-                ],
-                [
-                    'label'=>'商品添加',
-                    'url' => ['/goods/add'],
-                ],
-                [
-                    'label'=>'商品分类列表',
-                    'url' => ['/goods-category/index'],
-                ],
-                [
-                    'label'=>'商品分类添加',
-                    'url' => ['/goods-category/add'],
-                ],
-            ]
-        ],
-        ['label' => '品牌管理',
-            'items' =>[
-                [
-                    'label'=>'品牌列表',
-                    'url' => ['/brand/index'],
-                ],
-                [
-                    'label'=>'品牌添加',
-                    'url' => ['/brand/add'],
-                ],
-            ]
-        ],
-        ['label' => '文章管理',
-         'items' =>[
-             [
-              'label'=>'文章列表',
-              'url' => ['/article/index'],
-             ],
-             [
-                 'label'=>'文章分类列表',
-                 'url' => ['/article-category/index'],
-             ],
-             [
-                 'label'=>'文章添加',
-                 'url' => ['/article/add'],
-             ],
-             [
-                 'label'=>'文章分类添加',
-                 'url' => ['/article-category/add'],
-             ],
-         ]
-        ],
-        ['label' => '用户管理',
-            'items' =>[
-                [
-                    'label'=>'用户列表',
-                    'url' => ['/user/index'],
-                ],
-                [
-                    'label'=>'用户添加',
-                    'url' => ['/user/add'],
-                ],
-            ]
-        ],
-        ['label' => 'Rbac管理',
-            'items' =>[
-                [
-                    'label'=>'权限列表',
-                    'url' => ['/auth/view-pms'],
-                ],
-                [
-                    'label'=>'添加权限',
-                    'url' => ['/auth/add-pms'],
-                ],
-                [
-                    'label'=>'角色列表',
-                    'url' => ['/auth/view-role'],
-                ],
-                [
-                    'label'=>'添加角色',
-                    'url' => ['/auth/add-role'],
-                ],
-            ]
-        ],
-    ];
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => '登录', 'url' => ['/user/login']];
     } else {
+        $menuItems = [
+            ['label' => '商品管理',
+                'items' =>[
+                    [
+                        'label'=>'商品列表',
+                        'url' => ['/goods/index'],
+                    ],
+                    [
+                        'label'=>'商品添加',
+                        'url' => ['/goods/add'],
+                    ],
+                    [
+                        'label'=>'商品分类列表',
+                        'url' => ['/goods-category/index'],
+                    ],
+                    [
+                        'label'=>'商品分类添加',
+                        'url' => ['/goods-category/add'],
+                    ],
+                ]
+            ],
+            ['label' => '品牌管理',
+                'items' =>[
+                    [
+                        'label'=>'品牌列表',
+                        'url' => ['/brand/index'],
+                    ],
+                    [
+                        'label'=>'品牌添加',
+                        'url' => ['/brand/add'],
+                    ],
+                ]
+            ],
+            ['label' => '文章管理',
+                'items' =>[
+                    [
+                        'label'=>'文章列表',
+                        'url' => ['/article/index'],
+                    ],
+                    [
+                        'label'=>'文章分类列表',
+                        'url' => ['/article-category/index'],
+                    ],
+                    [
+                        'label'=>'文章添加',
+                        'url' => ['/article/add'],
+                    ],
+                    [
+                        'label'=>'文章分类添加',
+                        'url' => ['/article-category/add'],
+                    ],
+                ]
+            ],
+            ['label' => '菜单管理',
+                'items' =>[
+                    [
+                        'label'=>'菜单列表',
+                        'url' => ['/menu/index'],
+                    ],
+                    [
+                        'label'=>'菜单添加',
+                        'url' => ['/menu/add'],
+                    ],
+                ]
+            ],
+            ['label' => '用户管理',
+                'items' =>[
+                    [
+                        'label'=>'用户列表',
+                        'url' => ['/user/index'],
+                    ],
+                    [
+                        'label'=>'用户添加',
+                        'url' => ['/user/add'],
+                    ],
+                ]
+            ],
+            ['label' => 'Rbac管理',
+                'items' =>[
+                    [
+                        'label'=>'权限列表',
+                        'url' => ['/auth/view-pms'],
+                    ],
+                    [
+                        'label'=>'添加权限',
+                        'url' => ['/auth/add-pms'],
+                    ],
+                    [
+                        'label'=>'角色列表',
+                        'url' => ['/auth/view-role'],
+                    ],
+                    [
+                        'label'=>'添加角色',
+                        'url' => ['/auth/add-role'],
+                    ],
+                ]
+            ],
+        ];
         $menuItems[] = [
+
             'label' => '欢迎! (' . Yii::$app->user->identity->username . ')',
             'items'=>[
                 [
@@ -139,10 +153,6 @@ AppAsset::register($this);
             ]
 
         ];
-        echo Nav::widget([
-            'options' => ['class' => 'navbar-nav'],
-            'items' =>$menuItems1
-        ]);
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

@@ -2,6 +2,7 @@
 /////////商品//////////////
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\Brand;
 use backend\models\Goods;
 use backend\models\GoodsDayCount;
@@ -260,5 +261,14 @@ class GoodsController extends  Controller
             $gallery->delete();
             return 'success';
         }
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ]
+        ];
     }
 }

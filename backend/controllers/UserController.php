@@ -2,10 +2,12 @@
 /////////////user文章////////////////
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\LoginForm;
 use backend\models\PasswordForm;
 use backend\models\User;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\rbac\DbManager;
 use yii\web\Controller;
 use yii\web\Request;
@@ -20,7 +22,7 @@ class UserController extends Controller
         //分页工具类
         $query= User::find()->where('status>=0');
         $pager = new Pagination();
-        $pager->pageSize = 3;
+        $pager->pageSize = 5;
         $pager->totalCount=$query->count();
         $users=$query->limit($pager->limit)->offset($pager->offset)->all();
         return $this->render('index',['users'=>$users,'pager'=>$pager]);
@@ -59,30 +61,19 @@ class UserController extends Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','添加成功');
                 $this->redirect(['user/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$user->getErrors();
-                //显示错误信息
-                //跳转
-                \Yii::$app->session->setFlash('danger',$error['username'][0]);
-                $this->redirect(['user/add']);
             }
-        }else{
-            $roles = $auth->getRoles();
-            $array=[];
-            foreach ($roles as $role){
-                $array[$role->name] = $role->name;
-            }
-            //显示添加页面
-            return $this->render('add',['user'=>$user,'array'=>$array]);
         }
+            $roles=ArrayHelper::map($auth->getRoles(),'name','name');
+            //显示添加页面
+            return $this->render('add',['user'=>$user,'roles'=>$roles]);
+
     }
 
     //修改用户信息
     public function actionUpdate($id)
     {
         $request = new Request();
+        $auth = new DbManager();
         //数据库查询对应id数据
         $user = User::findOne(['id' => $id]);
         if($request->getIsPost()){
@@ -91,6 +82,17 @@ class UserController extends Controller
             //验证表单数据
             if($user->validate()){
                 $user->updated_at = time();
+                //移出用户所有角色
+                $auth->revokeAll($id);
+                //判断表单中是否有角色勾选
+                if($user->roles){
+                    foreach ($user->roles as $roleName){
+                        //获取角色对象
+                        $role=$auth->getRole($roleName);
+                        //为用户添加角色
+                        $auth->assign($role,$id);
+                    }
+                }
                 $user->save(false);
                 //跳转
                 \Yii::$app->session->setFlash('success','修改成功');
@@ -103,8 +105,12 @@ class UserController extends Controller
                 var_dump($error);
             }
         }else{
-
-            return $this->render('edit',['user'=>$user]);
+            //获取当前id下的所有角色
+            $role=ArrayHelper::map($auth->getRolesByUser($id),'name','name');
+            $user->roles=$role;
+            //所有角色
+            $roles=ArrayHelper::map($auth->getRoles(),'name','name');
+            return $this->render('edit',['user'=>$user,'roles'=>$roles]);
         }
     }
 
@@ -112,9 +118,12 @@ class UserController extends Controller
     //删除用户
     public function actionDelete()
     {
+        $auth = new DbManager();
         $id =\Yii::$app->request->post('id');
         $user=user::findOne(['id'=>$id]);
         if($user){
+            //移出用户所有角色
+            $auth->revokeAll($id);
             $user->delete();
             echo 'success';
         }
@@ -178,5 +187,15 @@ class UserController extends Controller
             }
         }
         return $this->render('password',['model'=>$model]);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                'except'=>['login']
+            ],
+        ];
     }
 }
