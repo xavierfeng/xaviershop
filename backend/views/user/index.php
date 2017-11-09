@@ -23,7 +23,7 @@
                 <?=(($user->status)==0)?"禁用":"";?>
                 <?=(($user->status)==10)?"启用":"";?>
             </td>
-            <td><?=date("Y-m-d H:i:s",$user->last_login_time)?></td>
+            <td><?=(date("Y-m-d H:i:s",$user->last_login_time)=="1970-01-01 08:00:00")?"未登录":date("Y-m-d H:i:s",$user->last_login_time)?></td>
             <td><?=$user->last_login_ip?></td>
             <td>
                 <a href="<?=\yii\helpers\Url::to(['user/update','id'=>$user->id])?>" class="btn btn-info">编辑</a>

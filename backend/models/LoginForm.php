@@ -29,7 +29,7 @@ class LoginForm extends Model{
         ];
     }
 
-    public function login($remember){
+    public function login(){
         //验证账号
         $user = User::findOne(['username'=>$this->username]);
         if($user){
@@ -43,11 +43,8 @@ class LoginForm extends Model{
                 }
                 $user->save(false);
                 //将登录标识保存到session
-                if($remember){
-                    \Yii::$app->user->login($user,3600*24);
-                }else{
-                    \Yii::$app->user->login($user);
-                }
+                \Yii::$app->user->login($user,$this->remember?3600:0);
+
                 return true;
             }else{
                 //添加错误信息

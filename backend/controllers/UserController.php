@@ -41,9 +41,10 @@ class UserController extends Controller
                 //保存用户表信息
                 $user->status = 10;
                 $user->created_at=time();
+                //随机生成auth_key
+                $user->auth_key=\Yii::$app->security->generateRandomString();
                 //密码加密保存
                 $user->password_hash= \Yii::$app->security->generatePasswordHash($user->password_hash);
-                $user->last_login_time=time();
                 $user->save();
                 //如果添加了角色 对用户角色进行添加
                 if($user->roles){
@@ -63,7 +64,9 @@ class UserController extends Controller
                 //获取错误信息
                 $error=$user->getErrors();
                 //显示错误信息
-                var_dump($error);
+                //跳转
+                \Yii::$app->session->setFlash('danger',$error['username'][0]);
+                $this->redirect(['user/add']);
             }
         }else{
             $roles = $auth->getRoles();
@@ -127,7 +130,7 @@ class UserController extends Controller
             $model->load($request->post());
             if($model->validate()){
                 //验证账号密码是否正确
-                if($model->login($model->remember)){
+                if($model->login()){
                     //提示信息  跳转
                     \Yii::$app->session->setFlash('success','登录成功');
                     //跳转
@@ -160,8 +163,8 @@ class UserController extends Controller
                 if (\Yii::$app->security->validatePassword($model->oldPassword, $password_hash)) {
                     //旧密码正确 更新当前用户的密码
                     User::updateAll([
-                        'password_hash'=>\Yii::$app->security->generatePasswordHash($model->newPassword)
-                    ],
+                        'password_hash'=>\Yii::$app->security->generatePasswordHash($model->newPassword),'auth_key'=>\Yii::$app->security->generateRandomString()
+                    ],//修改密码时重新设置auth_key让自动登录失效
                         ['id'=>\Yii::$app->user->id]
                     );
                     \Yii::$app->getSession()->setFlash('success','密码修改成功,请重新登录');
