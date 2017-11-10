@@ -34,6 +34,13 @@ class Menu extends ActiveRecord
     //获取所有菜单上级分类及名称
     public function getMenus()
     {
-       return  ArrayHelper::map(self::find()->asArray()->all(),'id','name');
+       return  ArrayHelper::map(self::find()->where(['menu'=>0])->asArray()->all(),'id','name');
+    }
+
+    //建立一级菜单和二级菜单的关系 一对多
+    public function getChildren()
+    {
+        //儿子menu => 父亲id
+        return $this->hasMany(self::className(),['menu'=>'id']);
     }
 }

@@ -18,7 +18,7 @@ class MenuController extends Controller
         $pager = new Pagination();
         $pager->pageSize = 10;
         $pager->totalCount=$query->count();
-        $menus=$query->limit($pager->limit)->offset($pager->offset)->orderBy(['sort'=>SORT_DESC,'menu'=>SORT_ASC])->all();
+        $menus=$query->limit($pager->limit)->offset($pager->offset)->orderBy(['menu'=>SORT_ASC])->all();
         return $this->render('index',['menus'=>$menus,'pager'=>$pager]);
     }
 
@@ -84,4 +84,5 @@ class MenuController extends Controller
             return false;
         }
     }
+
 }

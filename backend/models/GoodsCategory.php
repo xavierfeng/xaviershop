@@ -6,7 +6,6 @@ use creocoder\nestedsets\NestedSetsBehavior;
 
 class GoodsCategory extends ActiveRecord
 {
-    public $code;
 
     //获取zTree需要的数据
     public static function getZtreeNodes()
@@ -21,7 +20,6 @@ class GoodsCategory extends ActiveRecord
             'name'=>'分类名称',
             'intro'=>'分类简介',
             'parent_id'=>'上级分类',
-            'code'=>'验证码',
         ];
     }
     //设置验证规则
@@ -31,7 +29,6 @@ class GoodsCategory extends ActiveRecord
             ['name','required'],
             ['parent_id','required'],
             ['intro','required'],
-            ['code','captcha'],
         ];
     }
     public function behaviors() {

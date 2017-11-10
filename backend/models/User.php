@@ -34,6 +34,36 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    //获取用户对应菜单
+    public function getMenus()
+    {
+        $menuItems=[];
+        //获取所有一级菜单
+        $menus = Menu::find()->where(['menu'=>0])->orderBy("sort ASC")->all();
+        foreach ($menus as $menu){
+            $items=[];
+            //遍历一级菜单的子菜单
+            foreach ($menu->children as $child){
+                //根据用户权限确定是否显示该菜单
+                if(\Yii::$app->user->can($child->route)){
+                    $items[]=
+                        [
+                            'label'=>$child->name,
+                            'url' => [$child->route],
+                        ];
+                }
+            }
+            $menuItem=['label' => $menu->name,
+                'items' =>$items];
+            //将该组菜单放入菜单组
+            //如果没有二级菜单,则不显示一级菜单
+            if($items){
+                $menuItems[]=$menuItem;
+            }
+        }
+        return $menuItems;
+    }
+
     /**
      * Finds an identity by the given ID.
      * @param string|int $id the ID to be looked for

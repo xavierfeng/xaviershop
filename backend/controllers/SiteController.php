@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\Menu;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -119,4 +120,5 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
 }

@@ -11,22 +11,16 @@ class AuthController extends \yii\web\Controller
 {
     //添加权限
     public function actionAddPms(){
-        $auth= \Yii::$app->authManager;
         $model= new PermissionForm();
+        //设置场景 当前场景为SCENARIO_ADD
+        $model->scenario =PermissionForm::SCENARIO_ADD;
         $request =\Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
-            if($model->validate()){
-                if($model->check()){
-                    $permission = $auth->createPermission($model->name);
-                    $permission->description = $model->description;
-                    $auth->add($permission);
-                    //提示 跳转
-                    \Yii::$app->session->setFlash('success', '添加权限成功');
-                    return $this->redirect(['auth/view-pms']);
-                }else{
-                    $model->addError('name','权限已存在!');
-                }
+            if($model->validate()&&$model->add()){
+                //提示 跳转
+                \Yii::$app->session->setFlash('success', '添加权限成功');
+                return $this->redirect(['auth/view-pms']);
             }
         }
         return $this->render('add-pms',['model'=>$model]);
@@ -35,21 +29,15 @@ class AuthController extends \yii\web\Controller
     public function actionUpdatePms($pmsName){
         $auth= \Yii::$app->authManager;
         $model= new PermissionForm();
+        $model->scenario =PermissionForm::SCENARIO_EDIT;
+        $model->oldName =$pmsName;
         $request =\Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
-            if($model->validate()){
-                if($model->checkName($pmsName)){
-                    $newPermission =$auth->createPermission($model->name);
-                    $newPermission->description=$model->description;
-                    $auth->update($pmsName,$newPermission);
-                    //提示 跳转
-                    \Yii::$app->session->setFlash('success', '修改权限成功');
-                    return $this->redirect(['auth/view-pms']);
-                }else{
-                    $model->addError('name','权限名已存在!');
-                }
-
+            if($model->validate()&&$model->edit($pmsName)){
+                //提示 跳转
+                \Yii::$app->session->setFlash('success', '修改权限成功');
+                return $this->redirect(['auth/view-pms']);
             }
         }
         $permission = $auth->getPermission($pmsName);
@@ -73,36 +61,22 @@ class AuthController extends \yii\web\Controller
         \Yii::$app->session->setFlash('success', '删除权限成功');
         return $this->redirect(['auth/view-pms']);
     }
+
+
     //添加角色
     public function actionAddRole(){
         $auth = \Yii::$app->authManager;
         $model = new RoleForm();
+        $model->scenario =RoleForm::SCENARIO_ADD;
         $request = \Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
-            if($model->validate()){
-                //判断角色名是否重复
-                if($model->check()){
-                    //创建角色
-                    $role=$auth->createRole($model->name);
-                    $role->description=$model->description;
-                    $auth->add($role);//添加到数据表
-                    foreach ($model->permissions as $permissionName){
-                        //根据权限名称获取权限对象
-                        $permission=$auth->getPermission($permissionName);
-                        //给角色分配权限
-                        $auth->addChild($role,$permission);
-                    }
-                    //提示 跳转
-                    \Yii::$app->session->setFlash('success', '创建角色成功');
-                    return $this->redirect(['auth/view-role']);
-                }else{
-                    $model->addError('name','该角色已存在');
-                }
-
+            if($model->validate()&&$model->add()){
+                //提示 跳转
+                \Yii::$app->session->setFlash('success', '创建角色成功');
+                return $this->redirect(['auth/view-role']);
             }
         }
-
         $permissions=$auth->getPermissions();
         $permissions=ArrayHelper::map($permissions,'name','description');
         return $this->render('add-role',['model'=>$model,'permissions'=>$permissions]);
@@ -112,30 +86,15 @@ class AuthController extends \yii\web\Controller
     public function actionUpdateRole($roleName){
         $auth = \Yii::$app->authManager;
         $model = new RoleForm();
+        $model->scenario =RoleForm::SCENARIO_EDIT;
+        $model->oldName=$roleName;
         $request = \Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
-            if($model->validate()){
-                if($model->checkName($roleName)){
-                    //创建一个新的角色
-                    $newRole=$auth->createRole($model->name);
-                    $newRole->description=$model->description;
-                    $auth->update($roleName,$newRole);
-                    $auth->removeChildren($newRole);
-                    if($model->permissions){
-                        foreach ($model->permissions as $permissionName){
-                            //根据权限名称获取权限对象
-                            $permission=$auth->getPermission($permissionName);
-                            //给角色分配权限
-                            $auth->addChild($newRole,$permission);
-                        }
-                    }
-                    //提示 跳转
-                    \Yii::$app->session->setFlash('success', '修改角色成功');
-                    return $this->redirect(['auth/view-role']);
-                }else{
-                    $model->addError('name','该角色名已存在');
-                }
+            if($model->validate()&&$model->edit($roleName)){
+                //提示 跳转
+                \Yii::$app->session->setFlash('success', '修改角色成功');
+                return $this->redirect(['auth/view-role']);
             }
         }
         //获取该角色信息

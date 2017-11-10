@@ -14,7 +14,7 @@
     </tr>
     <?php foreach ($menus as $menu):?>
         <tr>
-            <td><?=str_repeat('——',$menu->sort-1).$menu->name?></td>
+            <td><?=$menu->name?></td>
             <td><?=$menu->route?></td>
             <td><?=$menu->sort?></td>
             <td>

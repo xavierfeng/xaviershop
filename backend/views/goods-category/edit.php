@@ -53,8 +53,6 @@ echo '<div>
 echo $form->field($goodsCategory,'parent_id')->hiddenInput();
 //分类简介
 echo $form->field($goodsCategory,'intro')->textInput();
-//验证码
-echo $form->field($goodsCategory,'code')->widget(\yii\captcha\Captcha::className(),['template'=>'<div class="row"><div class="col-lg-2">{input}</div><div class="col-lg-2">{image}</div></div>']);
 //提交按钮
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();
