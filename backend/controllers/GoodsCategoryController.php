@@ -55,12 +55,6 @@ class GoodsCategoryController extends Controller
                     $this->redirect(['goods-category/index']);
                 }
 
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$goodsCategory->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else {
             return $this->render('edit', ['goodsCategory'=>$goodsCategory]);
@@ -100,12 +94,6 @@ class GoodsCategoryController extends Controller
                     $this->redirect(['goods-category/index']);
                 }
 
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$goodsCategory->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else {
             return $this->render('edit', ['goodsCategory'=>$goodsCategory]);

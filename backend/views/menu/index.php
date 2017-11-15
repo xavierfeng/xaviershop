@@ -18,8 +18,12 @@
             <td><?=$menu->route?></td>
             <td><?=$menu->sort?></td>
             <td>
+                <?php if(Yii::$app->user->can('menu/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['menu/update','id'=>$menu->id])?>" class="btn btn-warning">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('menu/delete')){?>
                 <a href="javascript:;" class="btn btn-danger" id="<?=$menu->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

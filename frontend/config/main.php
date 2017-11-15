@@ -9,6 +9,14 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
+    //设置语言
+    'language'=>'zh-CN',
+    //设置布局文件(前台不需要yii2自带的布局)
+    'layout'=>false,
+    //设置默认路由
+    'defaultRoute'=>'member/login',
+    //修改时区
+    'timeZone'=>'PRC',
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
@@ -16,9 +24,18 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'class'=>'yii\web\User',
+            //指定实现认证接口的类
+            'identityClass' => 'frontend\models\member',
+            //'loginUrl'=>'login',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'on beforeLogin'=>function($event){
+                $model= $event->identity;
+                $model->last_login_time=time();
+                $model->last_login_ip=Yii::$app->request->getUserIP();
+                $model->save(false);
+            }
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
@@ -36,14 +53,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

@@ -31,6 +31,20 @@ class GoodsCategory extends ActiveRecord
             ['intro','required'],
         ];
     }
+
+    //建立一级分类和二级分类的关系 一对多
+    public function getChildren()
+    {
+        //儿子menu => 父亲id
+        return $this->hasMany(self::className(),['parent_id'=>'id']);
+    }
+
+    //找爸爸
+    public function getParent()
+    {
+        return $this->hasOne(self::class,['id'=>'parent_id']);
+    }
+
     public function behaviors() {
         return [
             'tree' => [

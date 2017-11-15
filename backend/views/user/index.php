@@ -26,8 +26,12 @@
             <td><?=(date("Y-m-d H:i:s",$user->last_login_time)=="1970-01-01 08:00:00")?"未登录":date("Y-m-d H:i:s",$user->last_login_time)?></td>
             <td><?=$user->last_login_ip?></td>
             <td>
+                <?php if(Yii::$app->user->can('user/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['user/update','id'=>$user->id])?>" class="btn btn-info">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('user/delete')){?>
                 <a href="javascript:;" class="btn btn-warning" id="<?=$user->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

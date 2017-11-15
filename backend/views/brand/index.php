@@ -24,8 +24,12 @@
                 <?=(($brand->status)==1)?"显示":"";?>
             </td>
             <td>
+                <?php if(Yii::$app->user->can('brand/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['brand/update','id'=>$brand->id])?>" class="btn btn-info">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('brand/delete')){?>
                 <a href="javascript:;" class="btn btn-warning" id="<?=$brand->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

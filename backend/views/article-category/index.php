@@ -22,8 +22,12 @@
                 <?=(($articleCate->status)==1)?"显示":"";?>
             </td>
             <td>
+                <?php if(Yii::$app->user->can('article-category/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['article-category/update','id'=>$articleCate->id])?>" class="btn btn-info">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('article-category/delete')){?>
                 <a href="javascript:;" class="btn btn-warning" id="<?=$articleCate->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

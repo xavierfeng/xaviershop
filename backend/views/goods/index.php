@@ -25,9 +25,15 @@
             <td><?=date("Y-m-d H:i:s",$goods->create_time)?></td>
             <td><?=\yii\bootstrap\Html::img($goods->logo,['width'=>50,'height'=>50])?></td>
             <td>
+                <?php if(Yii::$app->user->can('goods/gallery')){?>
                 <a href="<?=\yii\helpers\Url::to(['goods/gallery','id'=>$goods->id])?>" class="btn btn-info">相册</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('goods/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['goods/update','id'=>$goods->id])?>" class="btn btn-warning">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('goods/delete')){?>
                 <a href="javascript:;" class="btn btn-danger" id="<?=$goods->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

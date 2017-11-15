@@ -47,12 +47,6 @@ class BrandController extends Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','添加成功');
                 $this->redirect(['brand/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$brand->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else{
             //显示添加页面
@@ -121,12 +115,6 @@ class BrandController extends Controller
                 //跳转页面修改成功
                 \Yii::$app->session->setFlash('success', '修改成功');
                 return $this->redirect(['brand/index']);
-            } else {
-                //验证未通过
-                //获取错误信息
-                $error = $brand->getErrors();
-                //显示错误信息
-                var_dump($error);exit;
             }
         }
         //显示修改页面

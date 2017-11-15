@@ -83,12 +83,6 @@ class GoodsController extends  Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','添加成功');
                 $this->redirect(['goods/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$goods->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else{
             //返回所有品牌
@@ -120,12 +114,6 @@ class GoodsController extends  Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','修改成功');
                 $this->redirect(['goods/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$goods->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else{
             //返回所有品牌

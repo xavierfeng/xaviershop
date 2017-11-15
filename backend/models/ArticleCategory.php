@@ -35,4 +35,9 @@ class ArticleCategory extends ActiveRecord
     {
         return ArrayHelper::map(self::find()->asArray()->all(), 'id', 'name');
     }
+
+    public function getChildren()
+    {
+        return $this->hasMany(Article::className(),['article_category_id'=>'id']);
+    }
 }

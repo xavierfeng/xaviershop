@@ -46,12 +46,6 @@ class ArticleController extends Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','添加成功');
                 $this->redirect(['article/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$article->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else{
             //显示添加页面
@@ -81,12 +75,6 @@ class ArticleController extends Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','修改成功');
                 $this->redirect(['article/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$article->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
         }else{
             //显示添加页面

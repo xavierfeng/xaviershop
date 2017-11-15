@@ -97,21 +97,15 @@ class UserController extends Controller
                 //跳转
                 \Yii::$app->session->setFlash('success','修改成功');
                 $this->redirect(['user/index']);
-            }else{
-                //验证未通过
-                //获取错误信息
-                $error=$user->getErrors();
-                //显示错误信息
-                var_dump($error);
             }
-        }else{
+        }
             //获取当前id下的所有角色
             $role=ArrayHelper::map($auth->getRolesByUser($id),'name','name');
             $user->roles=$role;
             //所有角色
             $roles=ArrayHelper::map($auth->getRoles(),'name','name');
             return $this->render('edit',['user'=>$user,'roles'=>$roles]);
-        }
+
     }
 
 

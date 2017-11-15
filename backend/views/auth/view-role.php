@@ -28,8 +28,12 @@ $this->registerJsFile('@web/dataTables/media/js/jquery.dataTables.js',[
             <td><?=$role->name?></td>
             <td><?=$role->description?></td>
             <td>
+                <?php if(Yii::$app->user->can('auth/update-role')){?>
                 <a href="<?=\yii\helpers\Url::to(['auth/update-role','roleName'=>$role->name])?>" class="btn btn-warning">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('auth/del-role')){?>
                 <a href="<?=\yii\helpers\Url::to(['auth/del-role','roleName'=>$role->name])?>" class="btn btn-danger">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

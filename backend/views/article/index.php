@@ -26,9 +26,15 @@
             </td>
             <td><?=date('Y-m-d H:i:s',$article->create_time)?></td>
             <td>
+                <?php if(Yii::$app->user->can('article/view')){?>
                 <a href="<?=\yii\helpers\Url::to(['article/view','id'=>$article->id])?>" class="btn btn-info">查看</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('article/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['article/update','id'=>$article->id])?>" class="btn btn-warning">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('article/delete')){?>
                 <a href="javascript:;" class="btn btn-danger" id="<?=$article->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

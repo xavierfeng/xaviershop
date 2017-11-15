@@ -38,5 +38,14 @@ class Goods extends ActiveRecord
             ['code','captcha'],
         ];
     }
-
+    //找分类名称
+    public function getCategory()
+    {
+        return $this->hasOne(GoodsCategory::className(),['id'=>'goods_category_id']);
+    }
+    //找商品相册图片
+    public function getGallery()
+    {
+        return $this->hasMany(GoodsGallery::className(),['goods_id'=>'id']);
+    }
 }

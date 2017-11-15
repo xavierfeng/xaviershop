@@ -28,9 +28,12 @@ $this->registerJsFile('@web/dataTables/media/js/jquery.dataTables.js',[
             <td><?=$permission->name?></td>
             <td><?=$permission->description?></td>
             <td>
+                <?php if(Yii::$app->user->can('auth/update-pms')){?>
                 <a href="<?=\yii\helpers\Url::to(['auth/update-pms','pmsName'=>$permission->name])?>" class="btn btn-warning">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('auth/del-pms')){?>
                 <a href="<?=\yii\helpers\Url::to(['auth/del-pms','pmsName'=>$permission->name])?>" class="btn btn-danger">删除</a>
-
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>

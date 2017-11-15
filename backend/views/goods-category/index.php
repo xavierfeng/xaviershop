@@ -17,8 +17,12 @@
             <td><?=str_repeat("---",$goodsCategory->depth).$goodsCategory->name?></td>
             <td><?=$goodsCategory->intro?></td>
             <td>
+                <?php if(Yii::$app->user->can('goods-category/update')){?>
                 <a href="<?=\yii\helpers\Url::to(['goods-category/update','id'=>$goodsCategory->id])?>" class="btn btn-info">编辑</a>
+                <?php } ?>
+                <?php if(Yii::$app->user->can('goods-category/delete')){?>
                 <a href="javascript:;" class="btn btn-warning" id="<?=$goodsCategory->id?>">删除</a>
+                <?php } ?>
             </td>
         </tr>
     <?php endforeach; ?>
