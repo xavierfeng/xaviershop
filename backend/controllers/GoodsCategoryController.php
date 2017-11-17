@@ -28,6 +28,8 @@ class GoodsCategoryController extends Controller
     //添加商品分类
     public function actionAdd()
     {
+        $redis=new \Redis();
+        $redis->connect('127.0.0.1');
         $goodsCategory = new GoodsCategory();
         //parent_id设置默认值
         $goodsCategory->parent_id=0;
@@ -43,6 +45,7 @@ class GoodsCategoryController extends Controller
                     //创建根节点
                     $goodsCategory->makeRoot(false);
                     //$goodsCategory->save(false); 不能使用save
+                    $redis->del('goodscategory');
                     //跳转
                     \Yii::$app->session->setFlash('success','添加根节点成功');
                     $this->redirect(['goods-category/index']);
@@ -50,11 +53,11 @@ class GoodsCategoryController extends Controller
                     //创建子节点
                     $parent = GoodsCategory::findOne(['id'=>$goodsCategory->parent_id]);
                     $goodsCategory->prependTo($parent,false);
+                    $redis->del('goodscategory');
                     //跳转
                     \Yii::$app->session->setFlash('success','添加子节点成功');
                     $this->redirect(['goods-category/index']);
                 }
-
             }
         }else {
             return $this->render('edit', ['goodsCategory'=>$goodsCategory]);
@@ -64,6 +67,8 @@ class GoodsCategoryController extends Controller
     //修改商品分类
     public function actionUpdate($id)
     {
+        $redis=new \Redis();
+        $redis->connect('127.0.0.1');
         $goodsCategory = GoodsCategory::findOne(['id'=>$id]);
         //parent_id设置默认值
         $request = new Request();
@@ -79,8 +84,10 @@ class GoodsCategoryController extends Controller
                     //根节点修改为根节点报错--单独处理 旧parent_id=0
                     if($goodsCategory->getOldAttribute('parent_id')==0){
                         $goodsCategory->save(false);
+                        $redis->del('goodscategory');
                     }else{
                         $goodsCategory->makeRoot(false);
+                        $redis->del('goodscategory');
                     }
                     //跳转
                     \Yii::$app->session->setFlash('success','编辑根节点成功');
@@ -89,6 +96,7 @@ class GoodsCategoryController extends Controller
                     //创建子节点
                     $parent = GoodsCategory::findOne(['id'=>$goodsCategory->parent_id]);
                     $goodsCategory->prependTo($parent,false);
+                    $redis->del('goodscategory');
                     //跳转
                     \Yii::$app->session->setFlash('success','编辑子节点成功');
                     $this->redirect(['goods-category/index']);
@@ -104,6 +112,8 @@ class GoodsCategoryController extends Controller
     public function actionDelete(){
         //判断该分类是否有子节点
         $request = new Request();
+        $redis=new \Redis();
+        $redis->connect('127.0.0.1');
         $id=$request->post();
         $goodsCategory = GoodsCategory::findOne(['id'=>$id]);
             //判断该节点是否是叶子节点(没有儿子)
@@ -111,12 +121,17 @@ class GoodsCategoryController extends Controller
                 //判断该节点是否是根节点
                 if($goodsCategory->parent_id != 0){
                     $goodsCategory->delete();
+                    $redis->del('goodscategory');
                     return 'success';
                 }else{
                     $goodsCategory->deleteWithChildren();
+                    $redis->del('goodscategory');
                     return 'success';
                 }
-            }else{
+
+            }
+
+            else{
                 return "false";
             }
 

@@ -48,4 +48,9 @@ class Goods extends ActiveRecord
     {
         return $this->hasMany(GoodsGallery::className(),['goods_id'=>'id']);
     }
+    //找商品详情
+    public function getIntro()
+    {
+        return $this->hasOne(GoodsIntro::className(),['goods_id'=>'id']);
+    }
 }

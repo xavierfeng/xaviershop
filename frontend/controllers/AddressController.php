@@ -15,8 +15,8 @@ class AddressController extends Controller
     {
         $article_categorys= ArticleCategory::find()->all();
         $addresses = Address::find()->where(["member_id"=>\Yii::$app->user->getId()])->orderBy(['status'=>SORT_DESC])->all();
-        $goods_categorys1=GoodsCategory::find()->where(['parent_id'=>0])->all();
-        return $this->render('index',['addresses'=>$addresses,'goods_categorys1'=>$goods_categorys1,'article_categorys'=>$article_categorys]);
+        $html=GoodsCategory::getGoodsCategorys();
+        return $this->render('index',['addresses'=>$addresses,'html'=>$html,'article_categorys'=>$article_categorys]);
     }
     //添加地址
     public function actionAdd()
@@ -46,7 +46,7 @@ class AddressController extends Controller
         $article_categorys= ArticleCategory::find()->all();
         $address= Address::findOne(['id'=>$id]);
         $request= new Request();
-        $goods_categorys1=GoodsCategory::find()->where(['parent_id'=>0])->all();
+        $html=GoodsCategory::getGoodsCategorys();
         if($request->isPost){
             $address->load($request->post(),'');
             if($address->validate()){
@@ -54,7 +54,7 @@ class AddressController extends Controller
                 return $this->redirect(['address/index']);
             }
         }else{
-            return $this->render('edit',['address'=>$address,'goods_categorys1'=>$goods_categorys1,'article_categorys'=>$article_categorys]);
+            return $this->render('edit',['address'=>$address,'html'=>$html,'article_categorys'=>$article_categorys]);
         }
 
     }

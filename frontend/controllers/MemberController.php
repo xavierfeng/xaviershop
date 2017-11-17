@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use backend\models\ArticleCategory;
 use backend\models\GoodsCategory;
 use frontend\components\Sms;
+use frontend\models\Cart;
 use frontend\models\LoginForm;
 use frontend\models\Member;
 use yii\web\Controller;
@@ -20,11 +21,51 @@ class MemberController extends Controller
             $model->load($request->post(),'');
             if($model->validate()) {
                 if($model->login()){
-                    //跳转首页
-                    $this->redirect(['member/index']);
+                    //登录时判断cookie中是否有购物车信息
+                    $cookies=\Yii::$app->request->cookies;
+                    $carts=$cookies->getValue('carts');
+                    if($carts){
+                        //存在 将购物车信息保存到数据表中
+                        //cookie中商品信息
+                        $carts=unserialize($carts);
+                        //判断是否存在登录用户已经加入购物车的商品
+                        $member_id=\Yii::$app->user->id;
+                        $tableCarts=Cart::find()->Where(['member_id'=>$member_id])->all();
+                        if($tableCarts){
+                            foreach ($tableCarts as $tableCart){
+                                if(array_key_exists($tableCart->goods_id,$carts)) {
+                                    //相同的进行累加
+                                 $tableCart->amount += $carts[$tableCart->goods_id];
+                                 $tableCart->save();
+                                 //排除掉相同goods_id的键值对
+                                 unset($carts[$tableCart->goods_id]);
+                                }
+                            }
+                        }
+                        if($carts!=[]){
+                            //不相同的新增
+                            foreach ($carts as $goods_id=>$amount){
+                                $newCart= new Cart();
+                                $newCart->goods_id=$goods_id;
+                                $newCart->amount=$amount;
+                                $newCart->member_id=$member_id;
+                                $newCart->save();
+                            }
+                        }
+                        //删除cookie
+                        $cookies=\Yii::$app->response->cookies;
+                        $cookies->remove('carts');
+
+                        //跳转到购物车页面
+                        $this->redirect(['goods/cart']);
+                    }else{
+                        //不存在直接跳转首页
+                        $this->redirect(['member/index']);
+                    }
                 }
             }
         }
+
         return $this->render('login');
     }
 
@@ -83,8 +124,8 @@ class MemberController extends Controller
     public function actionIndex()
     {
         $article_categorys= ArticleCategory::find()->all();
-        $goods_categorys1=GoodsCategory::find()->where(['parent_id'=>0])->all();
-        return $this->render('index',['goods_categorys1'=>$goods_categorys1,'article_categorys'=>$article_categorys]);
+        $html=GoodsCategory::getGoodsCategorys();
+        return $this->render('index',['html'=>$html,'article_categorys'=>$article_categorys]);
     }
 
     //接受手机号码发送短信

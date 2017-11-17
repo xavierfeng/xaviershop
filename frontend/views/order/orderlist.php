@@ -2,22 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <script type="text/javascript" src="/js/jsAddress.js"></script>
-    <title>收货地址</title>
+	<title>订单页面</title>
 	<link rel="stylesheet" href="/style/base.css" type="text/css">
 	<link rel="stylesheet" href="/style/global.css" type="text/css">
 	<link rel="stylesheet" href="/style/header.css" type="text/css">
 	<link rel="stylesheet" href="/style/home.css" type="text/css">
-	<link rel="stylesheet" href="/style/address.css" type="text/css">
+	<link rel="stylesheet" href="/style/order.css" type="text/css">
 	<link rel="stylesheet" href="/style/bottomnav.css" type="text/css">
 	<link rel="stylesheet" href="/style/footer.css" type="text/css">
 
 	<script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
 	<script type="text/javascript" src="/js/home.js"></script>
-    <style>
-        span.error {color:red;};
-    </style>
 </head>
 <body>
 		<!-- 顶部导航 start -->
@@ -84,8 +80,8 @@
 						<div class="uclist mt10">
 							<ul class="list1 fl">
 								<li><a href="">用户信息></a></li>
-								<li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
-								<li><a href="<?=\yii\helpers\Url::to(['address/index'])?>">收货地址></a></li>
+                                <li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
+                                <li><a href="<?=\yii\helpers\Url::to(['address/index'])?>">收货地址></a></li>
 								<li><a href="">我的收藏></a></li>
 							</ul>
 
@@ -115,7 +111,7 @@
 			<div class="cart fl">
 				<dl>
 					<dt>
-						<a href="<?=\yii\helpers\Url::to(['goods/cart'])?>">去购物车结算</a>
+                        <a href="<?=\yii\helpers\Url::to(['goods/cart'])?>">去购物车结算</a>
 						<b></b>
 					</dt>
 					<dd>
@@ -140,9 +136,8 @@
                     <em></em>
                 </div>
                 <?=$html?>
-
             </div>
-			<!--  商品分类部分 end--> 
+			<!--  商品分类部分 end-->
 
 			<div class="navitems fl">
 				<ul class="fl">
@@ -166,16 +161,16 @@
 	<!-- 页面主体 start -->
 	<div class="main w1210 bc mt10">
 		<div class="crumb w1210">
-			<h2><strong>收货地址 </strong><span>> 修改地址</span></h2>
+			<h2><strong>我的订单</strong><span>> 订单列表</span></h2>
 		</div>
 		
 		<!-- 左侧导航菜单 start -->
 		<div class="menu fl">
-			<h3>我的XX</h3>
+			<h3>菜单</h3>
 			<div class="menu_wrap">
 				<dl>
 					<dt>订单中心 <b></b></dt>
-					<dd><b>.</b><a href="">我的订单</a></dd>
+					<dd class="cur"><b>.</b><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></dd>
 					<dd><b>.</b><a href="">我的关注</a></dd>
 					<dd><b>.</b><a href="">浏览历史</a></dd>
 					<dd><b>.</b><a href="">我的团购</a></dd>
@@ -183,11 +178,11 @@
 
 				<dl>
 					<dt>账户中心 <b></b></dt>
-					<dd class="cur"><b>.</b><a href="">账户信息</a></dd>
+					<dd><b>.</b><a href="">账户信息</a></dd>
 					<dd><b>.</b><a href="">账户余额</a></dd>
 					<dd><b>.</b><a href="">消费记录</a></dd>
 					<dd><b>.</b><a href="">我的积分</a></dd>
-					<dd><b>.</b><a href="">收货地址</a></dd>
+					<dd><b>.</b><a href="<?=\yii\helpers\Url::to(['address/index'])?>">收货地址</a></dd>
 				</dl>
 
 				<dl>
@@ -201,43 +196,67 @@
 		<!-- 左侧导航菜单 end -->
 
 		<!-- 右侧内容区域 start -->
-		<div  class="content fl ml10">
-			<div class="address_bd mt10">
-				<h4>修改收货地址</h4>
-				<form name="address_form" action="<?=\yii\helpers\Url::to(['address/update','id'=>$address->id])?>" method="post" id="address_form">
-						<ul>
-							<li>
-								<label for=""><span>*</span>收 货 人：</label>
-								<input type="text" id="member" name="member" class="txt" value="<?=$address->member?>" />
-                                <input type="hidden" id="id" name="id" class="txt" value="<?=$address->id?>"/>
-							</li>
-							<li>
-								<label for=""><span>*</span>所在地区：</label>
-                                <select id="cmbProvince" name="province"></select>
-                                <select id="cmbCity" name="city"></select>
-                                <select id="cmbArea" name="county"></select>
-                            </li>
-							<li>
-								<label for=""><span>*</span>详细地址：</label>
-								<input type="text" id="address" name="address" class="txt address"  value="<?=$address->address?>" />
-							</li>
-							<li>
-								<label for=""><span>*</span>手机号码：</label>
-								<input type="text" id="tel" name="tel" class="txt" value="<?=$address->tel?>"/>
-							</li>
-							<li>
-								<label for="">&nbsp;</label>
-								<input type="checkbox" value="1" name="status" class="check" <?=$address->status?"checked":""?>/>设为默认地址
-							</li>
-							<li>
-								<label for="">&nbsp;</label>
-                                <input value="修改地址" type="submit" id="submit">
-							</li>
-						</ul>
-					</form>
+		<div class="content fl ml10">
+			<div class="order_hd">
+				<h3>我的订单</h3>
+				<dl>
+					<dt>便利提醒：</dt>
+					<dd>待付款（0）</dd>
+					<dd>待确认收货（0）</dd>
+					<dd>待自提（0）</dd>
+				</dl>
 
-			</div>	
+				<dl>
+					<dt>特色服务：</dt>
+					<dd><a href="">我的预约</a></dd>
+					<dd><a href="">夺宝箱</a></dd>
+				</dl>
+			</div>
 
+			<div class="order_bd mt10">
+				<table class="orders">
+					<thead>
+						<tr>
+							<th width="10%">订单号</th>
+							<th width="20%">订单商品</th>
+							<th width="10%">收货人</th>
+							<th width="20%">订单金额</th>
+							<th width="20%">下单时间</th>
+							<th width="10%">订单状态</th>
+							<th width="10%">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+                    <?php foreach ($orderGoodsList as $orderGoods):?>
+						<tr>
+							<td><a href=""><?=$orderGoods->order_id?></a></td>
+							<td><a href=""><img src="<?=$orderGoods->logo?>" alt="" /></a></td>
+							<td><?=$orderGoods->order->name?></td>
+							<td><?=$orderGoods->order->delivery_price?> <?=$orderGoods->order->delivery_name?></td>
+							<td><?=date("Y-m-d H:i:s",$orderGoods->order->create_time)?></td>
+							<td><?php switch($orderGoods->order->status){
+                                    case (0):
+                                       echo "已取消";
+                                        break;
+                                    case (1):
+                                        echo "待付款";
+                                        break;
+                                    case (2):
+                                        echo "待发货";
+                                        break;
+                                    case (3):
+                                        echo "待收货";
+                                        break;
+                                    case (4):
+                                        echo "完成";
+                                        break;
+                                }?></td>
+							<td><a href="">查看</a> | <a href="">删除</a></td>
+						</tr>
+                    <?php endforeach;?>
+					</tbody> 
+				</table>
+			</div>
 		</div>
 		<!-- 右侧内容区域 end -->
 	</div>
@@ -247,16 +266,64 @@
 
 	<!-- 底部导航 start -->
 	<div class="bottomnav w1210 bc mt10">
-        <?php foreach ($article_categorys as $article_category): ?>
-		<div class="bnav<?=$article_category->id?>">
-			<h3><b></b> <em><?=$article_category->name?></em></h3>
+		<div class="bnav1">
+			<h3><b></b> <em>购物指南</em></h3>
 			<ul>
-            <?php foreach($article_category->children as $article):?>
-				<li><a href=""></a><?=$article->name?></li>
-            <?php endforeach; ?>
+				<li><a href="">购物流程</a></li>
+				<li><a href="">会员介绍</a></li>
+				<li><a href="">团购/机票/充值/点卡</a></li>
+				<li><a href="">常见问题</a></li>
+				<li><a href="">大家电</a></li>
+				<li><a href="">联系客服</a></li>
 			</ul>
 		</div>
-        <?php endforeach; ?>
+		
+		<div class="bnav2">
+			<h3><b></b> <em>配送方式</em></h3>
+			<ul>
+				<li><a href="">上门自提</a></li>
+				<li><a href="">快速运输</a></li>
+				<li><a href="">特快专递（EMS）</a></li>
+				<li><a href="">如何送礼</a></li>
+				<li><a href="">海外购物</a></li>
+			</ul>
+		</div>
+
+		
+		<div class="bnav3">
+			<h3><b></b> <em>支付方式</em></h3>
+			<ul>
+				<li><a href="">货到付款</a></li>
+				<li><a href="">在线支付</a></li>
+				<li><a href="">分期付款</a></li>
+				<li><a href="">邮局汇款</a></li>
+				<li><a href="">公司转账</a></li>
+			</ul>
+		</div>
+
+		<div class="bnav4">
+			<h3><b></b> <em>售后服务</em></h3>
+			<ul>
+				<li><a href="">退换货政策</a></li>
+				<li><a href="">退换货流程</a></li>
+				<li><a href="">价格保护</a></li>
+				<li><a href="">退款说明</a></li>
+				<li><a href="">返修/退换货</a></li>
+				<li><a href="">退款申请</a></li>
+			</ul>
+		</div>
+
+		<div class="bnav5">
+			<h3><b></b> <em>特色服务</em></h3>
+			<ul>
+				<li><a href="">夺宝岛</a></li>
+				<li><a href="">DIY装机</a></li>
+				<li><a href="">延保服务</a></li>
+				<li><a href="">家电下乡</a></li>
+				<li><a href="">京东礼品卡</a></li>
+				<li><a href="">能效补贴</a></li>
+			</ul>
+		</div>
 	</div>
 	<!-- 底部导航 end -->
 
@@ -287,50 +354,5 @@
 		</p>
 	</div>
 	<!-- 底部版权 end -->
-<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
-<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
-<script type="text/javascript">
-
-            $().ready(function() {
-// 在键盘按下并释放及提交后验证提交表单
-                $("#address_form").validate({
-                    rules: {
-                        member: {
-                            required: true,
-                        },
-                        address: {
-                            required: true,
-                        },
-                        tel: {
-                            required: true,
-                            digits:true,
-                            tel:true,
-                        },
-                    },
-                    messages: {
-                        member: {
-                            required: "请填写收货人",
-                        },
-                        address: {
-                            required:"请填写收货地址",
-                        },
-                        tel: {
-                            required: "请输入手机号码",
-                            digits:"请输入正确的手机号",
-                        },
-                    },
-                    errorElement:"span",
-                })
-            });
-            //自定义手机验证
-            jQuery.validator.addMethod("tel", function(value, element) {
-                var tel = /^13[0-9]{1}[0-9]{8}|^15[1-9]{1}[0-9]{8}|^18[1-9]{1}[0-9]{8}/;
-                return (tel.test(value));
-            }, "请正确填写手机号码");
-            //省市县三级联动
-            addressInit('cmbProvince', 'cmbCity', 'cmbArea',"<?=$address->province?>","<?=$address->city?>","<?=$address->county?>");
-
-
-</script>
 </body>
 </html>

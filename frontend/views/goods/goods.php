@@ -28,8 +28,8 @@
 	            preloadImages: false,
 	            alwaysOn:false,
 	            title:false,
-	            zoomWidth:400,
-	            zoomHeight:400
+	            zoomWidth:300,
+	            zoomHeight:300
 	        });
 		})
 	</script>
@@ -45,7 +45,7 @@
 				<ul>
                     <li>您好<?php if (Yii::$app->user->isGuest) {echo "游客，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/login']).">登录</a>] [<a href=".\yii\helpers\Url::to(['member/regist']).">免费注册</a>]" ;}else{echo Yii::$app->user->identity->username."，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/logout']).">注销</a>]";}?> </li>
 					<li class="line">|</li>
-					<li>我的订单</li>
+					<li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -99,7 +99,7 @@
 						<div class="uclist mt10">
 							<ul class="list1 fl">
 								<li><a href="">用户信息></a></li>
-								<li><a href="">我的订单></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
                                 <li><a href="<?=\yii\helpers\Url::to(['address/index'])?>">收货地址></a></li>
 								<li><a href="">我的收藏></a></li>
 							</ul>
@@ -130,7 +130,7 @@
 			<div class="cart fl">
 				<dl>
 					<dt>
-						<a href="">去购物车结算</a>
+						<a href="<?=\yii\helpers\Url::to(['goods/cart'])?>">去购物车结算</a>
 						<b></b>
 					</dt>
 					<dd>
@@ -154,28 +154,7 @@
                     <h2>全部商品分类</h2>
                     <em></em>
                 </div>
-                <div class="cat_bd none">
-                    <?php foreach ($goods_categorys1 as $goods_category1):?>
-                        <div class="cat item1">
-                            <h3><a href="<?=\yii\helpers\Url::to(['goods/list1','id'=>$goods_category1->id])?>"><?=$goods_category1->name?></a> <b></b></h3>
-                            <div class="cat_detail">
-
-                                <?php foreach($goods_category1->children as $goods_category2): ?>
-                                <dl class="dl_1st">
-                                    <dt><a href="<?=\yii\helpers\Url::to(['goods/list2','id'=>$goods_category2->id])?>"><?=$goods_category2->name?></a></dt>
-                                    <?php foreach($goods_category2->children as $goods_category3): ?>
-                                        <dd>
-                                            <a href="<?=\yii\helpers\Url::to(['goods/list','id'=>$goods_category3->id])?>"><?=$goods_category3->name?></a>
-                                        </dd>
-                                    <?php endforeach; ?>
-                                    <?php endforeach; ?>
-                                </dl>
-
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-
-                </div>
+                <?=$html?>
 
             </div>
 			<!--  商品分类部分 end--> 
@@ -330,7 +309,7 @@
 								</li>
                                 <?php foreach ($goods->gallery as $gallery):?>
 								<li>
-									<a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=$gallery->path?>',largeimage: '<?=$gallery->path?>'}"><img src="<?=$gallery->path?>"></a>
+									<a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=$gallery->path?>',largeimage: '<?=$gallery->path?>'}"><img src="<?=$gallery->path?>" ></a>
 								</li>
                                 <?php endforeach; ?>
 							</ul>
@@ -349,15 +328,15 @@
 						<li><span>上架时间：</span><?=date("Y-m-d",$goods->create_time)?></li>
 						<li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
 					</ul>
-					<form action="" method="post" class="choose">
+					<form action="<?=\yii\helpers\Url::to(['goods/add-cart'])?>" method="get" class="choose">
 						<ul>
-							
 							<li>
 								<dl>
 									<dt>购买数量：</dt>
 									<dd>
 										<a href="javascript:;" id="reduce_num"></a>
 										<input type="text" name="amount" value="1" class="amount"/>
+                                        <input type="hidden" name="goods_id" value="<?=$goods->id?>">
 										<a href="javascript:;" id="add_num"></a>
 									</dd>
 								</dl>
@@ -411,23 +390,7 @@
 
 						<div class="desc mt10">
 							<!-- 此处的内容 一般是通过在线编辑器添加保存到数据库，然后直接从数据库中读出 -->
-							<img src="/images/desc1.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc2.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc3.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc4.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc5.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc6.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc7.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc8.jpg" alt="" />
-							<p style="height:10px;"></p>
-							<img src="/images/desc9.jpg" alt="" />
+                            <?=$goods->intro->content?>
 						</div>
 					</div>
 					<!-- 商品介绍 end -->

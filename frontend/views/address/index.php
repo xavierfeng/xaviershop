@@ -30,7 +30,7 @@
 				<ul>
                     <li>您好<?php if (Yii::$app->user->isGuest) {echo "游客，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/login']).">登录</a>] [<a href=".\yii\helpers\Url::to(['member/regist']).">免费注册</a>]" ;}else{echo Yii::$app->user->identity->username."，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/logout']).">注销</a>]";}?> </li>
 					<li class="line">|</li>
-					<li>我的订单</li>
+					<li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -84,7 +84,7 @@
 						<div class="uclist mt10">
 							<ul class="list1 fl">
 								<li><a href="">用户信息></a></li>
-								<li><a href="">我的订单></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
 								<li><a href="<?=\yii\helpers\Url::to(['address/index'])?>">收货地址></a></li>
 								<li><a href="">我的收藏></a></li>
 							</ul>
@@ -115,7 +115,7 @@
 			<div class="cart fl">
 				<dl>
 					<dt>
-						<a href="">去购物车结算</a>
+						<a href="<?=\yii\helpers\Url::to(['goods/cart'])?>">去购物车结算</a>
 						<b></b>
 					</dt>
 					<dd>
@@ -139,29 +139,7 @@
                     <h2>全部商品分类</h2>
                     <em></em>
                 </div>
-                <div class="cat_bd none">
-                    <?php foreach ($goods_categorys1 as $goods_category1):?>
-                        <div class="cat item1">
-                            <h3><a href="<?=\yii\helpers\Url::to(['goods/list1','id'=>$goods_category1->id])?>"><?=$goods_category1->name?></a> <b></b></h3>
-                            <div class="cat_detail">
-
-                                <?php foreach($goods_category1->children as $goods_category2): ?>
-                                <dl class="dl_1st">
-                                    <dt><a href="<?=\yii\helpers\Url::to(['goods/list2','id'=>$goods_category2->id])?>"><?=$goods_category2->name?></a></dt>
-                                    <?php foreach($goods_category2->children as $goods_category3): ?>
-                                        <dd>
-                                            <a href="<?=\yii\helpers\Url::to(['goods/list','id'=>$goods_category3->id])?>"><?=$goods_category3->name?></a>
-                                        </dd>
-                                    <?php endforeach; ?>
-                                    <?php endforeach; ?>
-                                </dl>
-
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-
-                </div>
-
+                <?=$html?>
             </div>
 			<!--  商品分类部分 end--> 
 
