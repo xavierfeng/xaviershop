@@ -50,11 +50,6 @@ class AddressController extends Controller
         if($request->isPost){
             $address->load($request->post(),'');
             if($address->validate()){
-                if($address->status=1){
-                    $defaultAddress=Address::findOne(['status'=>1]);
-                    $defaultAddress->status=0;
-                    $defaultAddress->save();
-                }
                 $address->save();
                 return $this->redirect(['address/index']);
             }

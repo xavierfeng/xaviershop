@@ -227,10 +227,6 @@
 							</li>
 							<li>
 								<label for="">&nbsp;</label>
-								<input type="checkbox" value="1" name="status" class="check" <?=$address->status?"checked":""?>/>设为默认地址
-							</li>
-							<li>
-								<label for="">&nbsp;</label>
                                 <input value="修改地址" type="submit" id="submit">
 							</li>
 						</ul>

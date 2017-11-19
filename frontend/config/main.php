@@ -14,7 +14,7 @@ return [
     //设置布局文件(前台不需要yii2自带的布局)
     'layout'=>false,
     //设置默认路由
-    'defaultRoute'=>'member/login',
+    'defaultRoute'=>'member/index',
     //修改时区
     'timeZone'=>'PRC',
     'bootstrap' => ['log'],
