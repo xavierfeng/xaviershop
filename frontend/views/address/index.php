@@ -349,15 +349,22 @@
 
     $("#submit").click(function(){
         var url ="<?=\yii\helpers\Url::to(['address/add'])?>";
+        var user= "<?=Yii::$app->user->isGuest?>";
+        var login ="<?=\yii\helpers\Url::to(['member/login'])?>";
+        if(user){
+            $(location).attr('href', login);
+        }else{
             $.post(url,$('#address_form').serialize(),function(data){
-                    if(data=="success"){
-                        alert("添加地址成功");
-                        location.reload();
-                    }else{
-                        alert("添加地址失败");
-                    }
+                if(data=="success"){
+                    alert("添加地址成功");
+                    location.reload();
+                }else{
+                    alert("添加地址失败");
+                }
             })
-    })
+        }
+
+    });
 
     //修改默认地址
     $(".defalut-address").click(function(){

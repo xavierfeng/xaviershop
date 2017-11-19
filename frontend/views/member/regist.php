@@ -21,12 +21,11 @@
 			</div>
 			<div class="topnav_right fr">
 				<ul>
-					<li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
-					<li class="line">|</li>
-					<li>我的订单</li>
-					<li class="line">|</li>
-					<li>客户服务</li>
-
+                    <li>您好<?php if (Yii::$app->user->isGuest) {echo "游客，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/login']).">登录</a>] [<a href=".\yii\helpers\Url::to(['member/regist']).">免费注册</a>]" ;}else{echo Yii::$app->user->identity->username."，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/logout']).">注销</a>]";}?> </li>
+                    <li class="line">|</li>
+                    <li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
+                    <li class="line">|</li>
+                    <li>客户服务</li>
 				</ul>
 			</div>
 		</div>

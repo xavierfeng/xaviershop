@@ -140,8 +140,9 @@ $(function(){
     $(".checkout").click(function(){
         var user = "<?=Yii::$app->user->isGuest?>";
         var url="<?=\yii\helpers\Url::to(['order/order'])?>";
+        var login="<?=\yii\helpers\Url::to(['member/login'])?>";
         if(user){
-            alert("请先登录")
+            $(location).attr('href', login);
         }else{
             $(location).attr('href', url);
         }

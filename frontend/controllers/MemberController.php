@@ -55,17 +55,12 @@ class MemberController extends Controller
                         //删除cookie
                         $cookies=\Yii::$app->response->cookies;
                         $cookies->remove('carts');
-
-                        //跳转到购物车页面
-                        $this->redirect(['goods/cart']);
-                    }else{
-                        //不存在直接跳转首页
-                        $this->redirect(['member/index']);
                     }
+                    return $this->goBack();
                 }
             }
         }
-
+        \Yii::$app->user->setReturnUrl(\Yii::$app->request->referrer);
         return $this->render('login');
     }
 

@@ -13,10 +13,10 @@ class AddressController extends Controller
     //地址列表
     public function actionIndex()
     {
-        $article_categorys= ArticleCategory::find()->all();
-        $addresses = Address::find()->where(["member_id"=>\Yii::$app->user->getId()])->orderBy(['status'=>SORT_DESC])->all();
-        $html=GoodsCategory::getGoodsCategorys();
-        return $this->render('index',['addresses'=>$addresses,'html'=>$html,'article_categorys'=>$article_categorys]);
+            $article_categorys= ArticleCategory::find()->all();
+            $addresses = Address::find()->where(["member_id"=>\Yii::$app->user->getId()])->orderBy(['status'=>SORT_DESC])->all();
+            $html=GoodsCategory::getGoodsCategorys();
+            return $this->render('index',['addresses'=>$addresses,'html'=>$html,'article_categorys'=>$article_categorys]);
     }
     //添加地址
     public function actionAdd()
