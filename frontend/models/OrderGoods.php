@@ -18,8 +18,4 @@ class OrderGoods extends ActiveRecord
         ];
     }
 
-    public function getOrder()
-    {
-        return $this->hasOne(Order::className(),['id'=>'order_id']);
-    }
 }

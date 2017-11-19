@@ -7,6 +7,7 @@ use frontend\models\Cart;
 use frontend\models\Goods;
 use frontend\models\Order;
 use frontend\models\OrderGoods;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -47,47 +48,47 @@ class OrderController extends Controller
                 $order->area=$address->county;//县
                 $order->tel=$address->tel;//电话
                 $order->address=$address->address;//详细地址
-                $order->delivery_name=$request->post('delivery');//送货方式
-                switch ($order->delivery_name){
-                    case "普通快递送货上门":
-                        $order->delivery_price=floatval(10);//送货价格
-                        break;
-                    case "特快专递":
-                        $order->delivery_price=floatval(40);//送货价格
-                        break;
-                    case "加急快递送货上门":
-                    $order->delivery_price=floatval(40);//送货价格
-                        break;
-                    case "平邮":
-                    $order->delivery_price=floatval(10);//送货价格
-                        break;
-                }
-                $order->payment_name=$request->post('pay');//支付方式
-                $carts=Cart::find()->where(['member_id'=>$member_id])->all();//用户购物车
-                $order->total="";
-                foreach ($carts as $cart){
-                    $order->total+=($cart->goods->shop_price*$cart->amount);
-                }
-                $order->total+=$order->delivery_price;
-                $order->status=1;
+                $order->delivery_id=$request->post('delivery');//送货方式id
+                $order->delivery_name=Order::$deliveries[$order->delivery_id][0];//送货方式
+                $order->delivery_price=Order::$deliveries[$order->delivery_id][1];//价格
+                $order->payment_id=$request->post('pay');//支付方式id
+                $order->payment_name=Order::$pays[$order->payment_id][0];//送货方式
+                $order->status=1;//订单状态
+                $order->total=$order->delivery_price;
                 $order->create_time=time();
-                if($order->validate()){
+
+                //开启事务(操作数据表之前)
+                $transaction=\Yii::$app->db->beginTransaction();
+                try{
                     $order->save();//保存订单表
-                }
-                $order_id=$order->id;//订单id
-                foreach($carts as $cart){
-                    $order_goods=new OrderGoods();
-                    $order_goods->order_id=$order_id;//订单id
-                    $order_goods->goods_id=$cart->goods_id;//商品id
-                    $order_goods->goods_name=$cart->goods->name;//商品名称
-                    $order_goods->logo=$cart->goods->logo;//商品logo
-                    $order_goods->price=$cart->goods->shop_price;//价格
-                    $order_goods->amount=$cart->amount;//商品数量
-                    $order_goods->total=($cart->amount*$cart->goods->shop_price);//小计
-                    if($order_goods->validate()){
+                    $order_id=$order->id;//订单id
+                    $carts=Cart::find()->where(['member_id'=>$member_id])->all();//用户购物车
+                    foreach($carts as $cart){
+                        //判断商品库存是否足够
+                        if($cart->amount>$cart->goods->stock){
+                            throw new Exception($cart->goods->name.'商品库存不足');
+                        }
+                        $order_goods=new OrderGoods();
+                        $order_goods->order_id=$order_id;//订单id
+                        $order_goods->goods_id=$cart->goods_id;//商品id
+                        $order_goods->goods_name=$cart->goods->name;//商品名称
+                        $order_goods->logo=$cart->goods->logo;//商品logo
+                        $order_goods->price=$cart->goods->shop_price;//价格
+                        $order_goods->amount=$cart->amount;//商品数量
+                        $order_goods->total=($cart->amount*$cart->goods->shop_price);//小计
                         $order_goods->save();//保存订单商品表
+                        $order->total+=$order_goods->total;//订单金额累加
+                        Goods::updateAllCounters(['stock'=>-$cart->amount],['id'=>$cart->goods_id]);//扣减商品库存
                         $cart->delete();//保存订单表完成 删除购物车数据
                     }
+                    $order->save();//再次保存order的总价
+                    //提交事务
+                    $transaction->commit();
+                }catch (Exception $e){
+                    //回滚
+                    $transaction->rollBack();
+                    //下单失败,跳转回购物车 并且提示商品库存不足
+                    echo $e->getMessage();exit;
                 }
                 return $this->redirect(['order/orderfinish']);
             }else{
@@ -114,13 +115,6 @@ class OrderController extends Controller
         $member_id=\Yii::$app->user->id;
         //获取所有登录用户的订单
         $orderList=Order::find()->where(['member_id'=>$member_id])->all();
-        //登录用户的订单id
-        $orderIds=[];
-        foreach ($orderList as $order){
-            $orderIds[]=$order->id;
-        }
-        //登录用户所有订单商品信息
-        $orderGoodsList=OrderGoods::find()->where(['in','order_id',$orderIds])->all();
-        return $this->render('orderlist',['html'=>$html,'orderList'=>$orderList,'orderGoodsList'=>$orderGoodsList]);
+        return $this->render('orderlist',['html'=>$html,'orderList'=>$orderList]);
     }
 }

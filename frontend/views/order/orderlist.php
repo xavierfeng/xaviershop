@@ -227,14 +227,18 @@
 						</tr>
 					</thead>
 					<tbody>
-                    <?php foreach ($orderGoodsList as $orderGoods):?>
+                    <?php foreach ($orderList as $order):?>
 						<tr>
-							<td><a href=""><?=$orderGoods->order_id?></a></td>
-							<td><a href=""><img src="<?=$orderGoods->logo?>" alt="" /></a></td>
-							<td><?=$orderGoods->order->name?></td>
-							<td><?=$orderGoods->order->delivery_price?> <?=$orderGoods->order->delivery_name?></td>
-							<td><?=date("Y-m-d H:i:s",$orderGoods->order->create_time)?></td>
-							<td><?php switch($orderGoods->order->status){
+							<td><a href=""><?=$order->id?></a></td>
+							<td><a href="">
+                                    <?php foreach ($order->ordergoods as $count =>$ordergoods):?>
+                                    <img src="<?php if($count<3){echo $ordergoods->logo;}?>" alt="" />
+                                    <?php endforeach;?>
+                                </a></td>
+							<td><?=$order->name?></td>
+							<td>￥<?=$order->delivery_price?> <?=$order->delivery_name?></td>
+							<td><?=date("Y-m-d H:i:s",$order->create_time)?></td>
+							<td><?php switch($order->status){
                                     case (0):
                                        echo "已取消";
                                         break;

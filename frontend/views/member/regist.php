@@ -267,7 +267,7 @@
 
             $.get("<?=\yii\helpers\Url::to(['member/ajax-sms'])?>",{phone:phone},function(data){
                 //发送成功
-                if(data=='success'){
+                if(data=='true'){
                     alert('短信发送成功');
                 }else{
                     alert('短信发送失败,请稍后再试');

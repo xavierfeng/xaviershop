@@ -124,8 +124,23 @@ class GoodsController extends  Controller
         }
     }
 
+    //ueditor
+    public function actions()
+    {
+        return [
+            'upload' => [
+                'class' => 'kucha\ueditor\UEditorAction',
+                'config' => [
+                    "imageUrlPrefix"  => \Yii::$app->params['backend_domain'].'/upload',//图片访问路径前缀
+                    "imagePathFormat" => "/image/{yyyy}{mm}{dd}/{time}{rand:6}",//上传保存路径
+                    "imageRoot" => \Yii::getAlias("@webroot").'/upload'
+                ]
+            ]
+        ];
+    }
+
     //处理ajax图片上传
-    public function actionUpload()
+    public function actionUploads()
     {
         if(\Yii::$app->request->isPost){
             $imgFile = UploadedFile::getInstanceByName('file');

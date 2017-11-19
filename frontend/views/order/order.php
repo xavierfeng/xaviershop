@@ -24,7 +24,7 @@
 				<ul>
                     <li>您好<?php if (Yii::$app->user->isGuest) {echo "游客，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/login']).">登录</a>] [<a href=".\yii\helpers\Url::to(['member/regist']).">免费注册</a>]" ;}else{echo Yii::$app->user->identity->username."，欢迎来到京西！[<a href=".\yii\helpers\Url::to(['member/logout']).">注销</a>]";}?> </li>
 					<li class="line">|</li>
-					<li><a href="<?=\yii\helpers\Url::to(['order/orderlist'])?>">我的订单</a></li>
+					<li>我的订单</li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -66,7 +66,7 @@
 				<div class="address_info">
 				<p>
                     <?php foreach ($address as $addr):?>
-					<input type="radio" value="<?=$addr->id?>" name="address_id" <?=($addr->status==1)?"checked":""?>/><?=$addr->member?>  <?=$addr->tel?>  <?=$addr->province?> <?=$addr->city?> <?=$addr->county?> <?=$addr->address?> </p>
+					<input type="radio" value="<?=$addr->id?>" name="address_id" <?=($addr->status==1)?"checked":""?> /><?=$addr->member?>  <?=$addr->tel?>  <?=$addr->province?> <?=$addr->city?> <?=$addr->county?> <?=$addr->address?> </p>
                     <?php endforeach;?>
 				</div>
 
@@ -89,32 +89,16 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="cur">	
+                        <?php foreach (\frontend\models\Order::$deliveries as $k=>$delivery):?>
+							<tr class="<?=($k==1)?"cur":""?>">
 								<td>
-									<input type="radio" id="delivery" name="delivery" checked="checked" value="普通快递送货上门"/>普通快递送货上门
+									<input type="radio" class="delivery_select" id="delivery" name="delivery" <?=($k==1)?"checked":""?> value="<?=$k?>"/><?=$delivery[0]?>
 
 								</td>
-								<td>￥10.00</td>
-								<td>每张订单不满499.00元,运费15.00元, 订单4...</td>
+								<td>￥<span><?=number_format($delivery[1],2,'.','')?></span></td>
+								<td><?=$delivery[2]?></td>
 							</tr>
-							<tr>
-								
-								<td><input type="radio" id="delivery" name="delivery" value="特快专递"/>特快专递</td>
-								<td>￥40.00</td>
-								<td>每张订单不满499.00元,运费40.00元, 订单4...</td>
-							</tr>
-							<tr>
-								
-								<td><input type="radio" id="delivery" name="delivery" value="加急快递送货上门"/>加急快递送货上门</td>
-								<td>￥40.00</td>
-								<td>每张订单不满499.00元,运费40.00元, 订单4...</td>
-							</tr>
-							<tr>
-
-								<td><input type="radio" id="delivery" name="delivery" value="平邮"/>平邮</td>
-								<td>￥10.00</td>
-								<td>每张订单不满499.00元,运费15.00元, 订单4...</td>
-							</tr>
+                        <?php endforeach;?>
 						</tbody>
 					</table>
 
@@ -128,23 +112,13 @@
 
 
 				<div class="pay_select">
-					<table> 
+					<table>
+                        <?php foreach (\frontend\models\Order::$pays as$k=> $pay):?>
 						<tr >
-							<td class="col1"><input type="radio" name="pay" value="货到付款"/>货到付款</td>
-							<td class="col2">送货上门后再收款，支持现金、POS机刷卡、支票支付</td>
+							<td class="col1"><input type="radio" name="pay" value="<?=$k?>" <?=($k==1)?"checked":""?>/><?=$pay[0]?></td>
+							<td class="col2"><?=$pay[1]?></td>
 						</tr>
-						<tr class="cur">
-							<td class="col1"><input type="radio" name="pay" checked value="在线支付"/>在线支付</td>
-							<td class="col2">即时到帐，支持绝大数银行借记卡及部分银行信用卡</td>
-						</tr>
-						<tr>
-							<td class="col1"><input type="radio" name="pay" value="上门自提"/>上门自提</td>
-							<td class="col2">自提时付款，支持现金、POS刷卡、支票支付</td>
-						</tr>
-						<tr>
-							<td class="col1"><input type="radio" name="pay"  value="邮局汇款"/>邮局汇款</td>
-							<td class="col2">通过快钱平台收款 汇款后1-3个工作日到账</td>
-						</tr>
+                        <?php endforeach;?>
 					</table>
 				</div>
 			</div>
@@ -195,7 +169,7 @@
 							<td class="col1"><a href=""><img src="<?=$cart->goods->logo?>" alt="" /></a>  <strong><a href=""><?=$cart->goods->name?></a></strong></td>
 							<td class="col3">￥<?=$cart->goods->shop_price?></td>
 							<td class="col4"> <?=$cart->amount?></td>
-							<td class="col5"><span>￥<?=number_format($cart->amount*$cart->goods->shop_price,2,'.','')?></span></td>
+							<td class="col5">￥<span><?=number_format($cart->amount*$cart->goods->shop_price,2,'.','')?></span></td>
 						</tr>
                     <?php
                         $total+=$cart->amount*$cart->goods->shop_price;
@@ -209,7 +183,7 @@
 								<ul>
 									<li>
 										<span><?=$count?>件商品，总商品金额：</span>
-										<em>￥<?=$total?></em>
+										<em>￥<span id="total"></span></em>
 									</li>
 									<li>
 										<span>返现：</span>
@@ -217,11 +191,11 @@
 									</li>
 									<li>
 										<span>运费：</span>
-										<em>￥10.00</em>
+										<em id="em">￥<span></span></em>
 									</li>
 									<li>
 										<span>应付总额：</span>
-										<em>￥<?=number_format($total,2,'.','')?></em>
+										<em class="total">￥<span></span></em>
 									</li>
 								</ul>
 							</td>
@@ -235,7 +209,7 @@
 
 		<div class="fillin_ft">
 			<a href="javascript:;" id="submit"><span>提交表单</span></a>
-			<p>应付总额：<strong>￥<?=number_format($total,2,'.','')?>元</strong></p>
+			<p>应付总额：<strong class="total_price">￥<span class="total_price"></span>元</strong></p>
 </form>
 		</div>
 	</div>
@@ -271,12 +245,35 @@
 <script type="text/javascript">
     $(function(){
 
-        //a标签提交表单
-        $("#submit").click(function(){
-            $("#orderform").submit()
-        })
+        var totals = function (money) {
+            var total = 0;
+            $(".col5 span").each(function(){
+                total += parseFloat($(this).text());
+            });
 
-    };
+            $("#total").text(total.toFixed(2));
+            money = parseInt(money);
+            $('.total_price span').text((total+money).toFixed(2));
+            $(".total").text((total+money).toFixed(2));
+
+        };
+        totals($('#em span').text());
+
+        //运费自动变更
+        $(".delivery_select input").click(function(){
+            var price = $(".delivery_select input:checked").closest('tr').find('span').text();
+            $('#em span').text(price);
+            totals($('#em span').text());
+        });
+    });
+    $('#em span').text( $(".delivery_select input:checked").closest('tr').find('span').text());
+
+    //a标签提交表单
+    $("#submit").click(function(){
+        $("#orderform").submit()
+    });
+
+
 </script>
 </body>
 </html>

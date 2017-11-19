@@ -13,7 +13,7 @@ $this->registerJsFile('@web/webuploader/webuploader.js',[
     'depends'=>\yii\web\JqueryAsset::className(),//指定依赖关系,webuploader.js必须在jquery后面加载(依赖于jquery)
 //    'position'=>\yii\web\View::POS_END //指定加载文件的位置
 ]);
-$url = \yii\helpers\Url::to(['upload']);
+$url = \yii\helpers\Url::to(['uploads']);
 $this->registerJs(
     <<<JS
     // 初始化Web Uploader
